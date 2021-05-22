@@ -33,11 +33,19 @@ const dockerImage = (url) => {
   return url.split('/').slice(-1)[0].split(':')[0];
 }
 
+const icons = {
+  SUCCESS: ':white_check_mark:',
+  FAILURE: ':boom:',
+  INTERNAL_ERROR: '',
+  TIMEOUT: '',
+};
+
 // createSlackMessage create a message from a build object.
 const createSlackMessage = (build) => {
   let images = build.images.map(dockerImage).join(', ');
+  let icon = icons[build.status];
   let message = {
-    text: `Build \`${images}\` ${build.status}`,
+    text: `Build \`${images}\` ${build.status} ${icon}`,
     mrkdwn: true,
     attachments: [
       {
