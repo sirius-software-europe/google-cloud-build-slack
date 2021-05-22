@@ -30,30 +30,27 @@ exports.subscribe = (pubSubEvent, context) => {
 // dockerImage returns the last part of the provided URL.
 // For example, gcr.io/tidal-1529434400027/cast-highlight:latest => cast-highlight:latest
 const dockerImage = (url) => {
-  return url.split('/').slice(-1)[0];
+  return url.split('/').slice(-1)[0].split(':')[0];
 }
 
 // createSlackMessage create a message from a build object.
 const createSlackMessage = (build) => {
+  let images = build.images.map(dockerImage).join(', ');
   let message = {
-   text: `Build \`${build.id}\``,
+    text: `Build \`${images}\` ${build.status}`,
     mrkdwn: true,
     attachments: [
       {
-        title: 'Build logs',
-        title_link: build.logUrl,
-        fields: [{
-          title: 'Status',
-          value: build.status
-        }]
+        text: `\`${build.id}\``,
+        actions: [
+          {
+            type: "button",
+            text: "Build Log",
+            url: build.logUrl,
+          }
+        ]
       }
-    ]
+    ],
   };
-  if (build.images) {
-    message.attachments[0].fields.push({
-      title: 'Image',
-      value: build.images.map(dockerImage).join(', ')
-    });
-  }
   return message;
 }
