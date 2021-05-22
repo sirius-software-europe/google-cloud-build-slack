@@ -34,7 +34,7 @@ const dockerImage = (url) => {
 }
 
 const icons = {
-  SUCCESS: ':white_check_mark:',
+  SUCCESS: ':dart:',
   FAILURE: ':boom:',
   INTERNAL_ERROR: '',
   TIMEOUT: '',
